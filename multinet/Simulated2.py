@@ -25,11 +25,14 @@ mes = {
 
 path_random = [1, 2, 3, 4, 5, 6, 7]
 
-def initialization(path_random):
 
+def initialization(path_random):
     return path_random
 
-a= [1, 2, 3, 4, 5, 6, 7]
+
+a = [1, 2, 3, 4, 5, 6, 7]
+
+
 def generate_new(path):
     numbers = len(path)
     # 随机生成两个不重复的点
@@ -50,12 +53,13 @@ def generate_new(path):
 
 # length_mat为各个节点之间的最短距离矩阵
 def e(path, mes):
-    loss = 0;
+    loss = 0
     for key in mes:
         mesSingleTime = mes[key]
         for index in range(len(mesSingleTime)):
-            for index2 in range(index+1,len(mesSingleTime)):
-                if(path.index(mesSingleTime[index][0])<path.index(mesSingleTime[index2][0]) and path.index(mesSingleTime[index][1])>path.index(mesSingleTime[index2][1])):
+            for index2 in range(index + 1, len(mesSingleTime)):
+                if (path.index(mesSingleTime[index][0]) < path.index(mesSingleTime[index2][0]) and path.index(
+                        mesSingleTime[index][1]) > path.index(mesSingleTime[index2][1])):
                     # print(mesSingleTime[index],"jiaocha",mesSingleTime[index2])
                     loss += 1
                 if (path.index(mesSingleTime[index][0]) > path.index(mesSingleTime[index2][0]) and path.index(
@@ -64,6 +68,19 @@ def e(path, mes):
                     loss += 1
         # print(mes[key])
     return loss
+
+def e2(path, mes):
+    loss = 0
+    for key in mes:
+        mesSingleTime = mes[key]
+        for index in range(len(mesSingleTime)):
+            dis = abs(path.index(mesSingleTime[index][0]) - path.index(mesSingleTime[index][1]))
+            loss += dis
+        # print(mes[key])
+    return loss
+
+# print(e([2,4,1,3,5,7,6],mes))
+
 
 def metropolis(e, new_e, t):
     if new_e <= e:
@@ -83,8 +100,9 @@ def search(all_path, length_mat):
             best_path = path
     return best_path
 
-#t0为初始温度，t_final为终止温度，alpha为冷却系数，inner_iter为内层迭代次数
-def sa(t0, t_final, alpha, inner_iter,length_mat,ai):
+
+# t0为初始温度，t_final为终止温度，alpha为冷却系数，inner_iter为内层迭代次数
+def sa(t0, t_final, alpha, inner_iter, length_mat, ai):
     all_path = []
     all_ex = []
     init = initialization(ai)
@@ -103,18 +121,13 @@ def sa(t0, t_final, alpha, inner_iter,length_mat,ai):
         all_path.append(path)
         all_ex.append(ex)
         t = alpha * t
-        print("当前温度：",t)
+        print("当前温度：", t)
     return all_path, all_ex
 
-# loss = e([7, 6, 5, 3, 4, 1, 2],mes)
-# print(loss)
-
-# c = metropolis(loss,loss2)
-# print(c)
 
 if __name__ == '__main__':
     length_mat = mes
-    all_path, all_ex = sa(3000, pow(10, -1), 0.6, 200, length_mat)
+    all_path, all_ex = sa(3000, pow(10, -1), 0.98, 200, length_mat,a)
     print(search(all_path, length_mat), round(e(search(all_path, length_mat), length_mat)))
     iteration = len(all_path)
     all_path = np.array(all_path)

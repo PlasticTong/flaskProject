@@ -108,6 +108,7 @@ def mesCross():
     print(sim.search(all_path, length_mat), round(sim.e(sim.search(all_path, length_mat), length_mat)))
     iteration = len(all_path)
     res = sim.search(all_path, length_mat)
+    # print(sim.e2(res,length_mat))
     all_path = np.array(all_path)
     all_ex = np.array(all_ex)
     plt.xlabel("Iteration")

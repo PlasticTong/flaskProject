@@ -52,7 +52,7 @@ def generate_new(path):
 # print([7, 6, 5, 3, 4, 1, 2].index(1))
 
 # length_mat为各个节点之间的最短距离矩阵
-def e(path, mes):
+def e2(path, mes):
     loss = 0
     for key in mes:
         mesSingleTime = mes[key]
@@ -69,7 +69,7 @@ def e(path, mes):
         # print(mes[key])
     return loss
 
-def e2(path, mes):
+def e(path, mes):
     loss = 0
     for key in mes:
         mesSingleTime = mes[key]
@@ -121,13 +121,14 @@ def sa(t0, t_final, alpha, inner_iter, length_mat, ai):
         all_path.append(path)
         all_ex.append(ex)
         t = alpha * t
-        print("当前温度：", t)
+        # print("当前温度：", t)
     return all_path, all_ex
+
 
 
 if __name__ == '__main__':
     length_mat = mes
-    all_path, all_ex = sa(3000, pow(10, -1), 0.98, 200, length_mat,a)
+    all_path, all_ex = sa(3000, pow(10, -1) , 0.98, 200, length_mat,a)
     print(search(all_path, length_mat), round(e(search(all_path, length_mat), length_mat)))
     iteration = len(all_path)
     all_path = np.array(all_path)

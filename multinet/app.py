@@ -297,7 +297,7 @@ def searchHopOnce(data, mes_hop, n, start, end):
         res_final.append(data[index - 1])
     return res_final
 
-@app.route('/mesBE/check_ip', methods=['POST'])
+@app.route('/mesfilter/check_ip', methods=['POST'])
 def check_ip():
     data_json = request.get_json()
     data = data_json["data"]
@@ -309,7 +309,7 @@ def check_ip():
     df = pd.DataFrame(data, index=None)
     df = df[(df.timesecond >= start_time) & (df.timesecond <= end_time)]
     new_df = pd.DataFrame()
-    print(df)
+    # print(df)
     for ip_ in ips:
         up, down = [ip_], [ip_]
         for i in range(1, hop + 1):
@@ -334,14 +334,14 @@ def check_ip():
                     if i == 1:
                         df_2 = df[df.source == ip]
                         if len(df_2) != 0:
-                            down = df_2.loc[:, ['source', 'timesecond']].values
+                            down = df_2.loc[:, ['target', 'timesecond']].values
                             new_df = pd.concat([new_df, df_2], axis=0)
                         else:
                             down = []
                     else:
-                        df_2 = df[(df.target == ip[0]) & (df.timesecond < ip[1])]
+                        df_2 = df[(df.source == ip[0]) & (df.timesecond > ip[1])]
                         if len(df_2) != 0:
-                            up = df_1.loc[:, ['source', 'timesecond']].values
+                            down = df_2.loc[:, ['target', 'timesecond']].values
                             new_df = pd.concat([new_df, df_2], axis=0)
                         else:
                             down = []
@@ -356,7 +356,6 @@ def check_ip():
             #     new_df = pd.concat([new_df, df_2], axis=0)
     new_df = new_df.drop_duplicates(keep='first')
     dd = new_df.sort_values('id').to_dict("records")
-    print(dd)
     return dd
 
 
